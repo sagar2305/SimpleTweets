@@ -1,11 +1,13 @@
 package com.codepath.apps.restclienttemplate.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.adapters.TweetAdapter;
@@ -24,6 +26,8 @@ import java.util.ArrayList;
 import cz.msebera.android.httpclient.Header;
 
 public class TimelineActivity extends AppCompatActivity {
+
+    static final int TWEET_REQUEST = 1;  // The request code
 
     private TwitterClient client;
     TweetAdapter tweetAdapter;
@@ -98,5 +102,19 @@ public class TimelineActivity extends AppCompatActivity {
                 Log.d("TwitterClient", errorResponse.toString());
                 throwable.printStackTrace();            }
         }, page );
+    }
+
+    public void onComposeTweet(MenuItem item) {
+        Intent intent = new Intent(this, ComposeTweetActivity.class);
+        startActivityForResult(intent, TWEET_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == TWEET_REQUEST && resultCode == RESULT_OK) {
+            //insert the tweet
+            String tweet = data.getStringExtra("tweet");
+            Log.d("RESULTTWEET", tweet);
+        }
     }
 }

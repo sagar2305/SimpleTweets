@@ -5,6 +5,7 @@
     <item
         android:id="@+id/miCompose"
         android:icon="@drawable/ic_launcher"
+        android:onClick="onComposeTweet"
         app:showAsAction="always"
         android:title="Tweet">
     </item>
