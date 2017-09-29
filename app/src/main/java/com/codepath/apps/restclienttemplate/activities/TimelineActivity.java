@@ -1,16 +1,17 @@
 package com.codepath.apps.restclienttemplate.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.codepath.apps.restclienttemplate.R;
-import com.codepath.apps.restclienttemplate.utils.TwitterApp;
-import com.codepath.apps.restclienttemplate.utils.TwitterClient;
 import com.codepath.apps.restclienttemplate.adapters.TweetAdapter;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.utils.EndlessRecyclerViewScrollListener;
+import com.codepath.apps.restclienttemplate.utils.TwitterApp;
+import com.codepath.apps.restclienttemplate.utils.TwitterClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -45,10 +46,19 @@ public class TimelineActivity extends AppCompatActivity {
         rvTweets.setLayoutManager(new LinearLayoutManager(this));
         rvTweets.setAdapter(tweetAdapter);
 
-        populateTimeline();
+        rvTweets.setOnScrollListener(new EndlessRecyclerViewScrollListener(new LinearLayoutManager(this)) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                Tweet lastTweet = tweets.get(tweets.size() - 1);
+                populateTimeline(lastTweet.getUid());
+            }
+        });
+
+        populateTimeline(-1);
     }
 
-    private void populateTimeline() {
+    private void populateTimeline(long page) {
+
         client.getHomeTimeline(new JsonHttpResponseHandler() {
 
             @Override
@@ -80,6 +90,6 @@ public class TimelineActivity extends AppCompatActivity {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("TwitterClient", errorResponse.toString());
                 throwable.printStackTrace();            }
-        });
+        }, page );
     }
 }
