@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -47,7 +48,11 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         // populate views
         holder.tvUsername.setText(tweet.getUser().name);
         holder.tvBody.setText(tweet.getBody());
-        holder.tvRelativeTimestamp.setText(tweet.getRelativeTimestamp());
+        try {
+            holder.tvRelativeTimestamp.setText(tweet.getRelativeTimestamp());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         Glide.with(context).load(tweet.getUser().profileImageUrl).into(holder.ivProfileImage);
     }
 
