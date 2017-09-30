@@ -108,9 +108,22 @@ public class TimelineActivity extends AppCompatActivity {
     private void postTweet(String tweet) {
         try {
             client.postTweet(tweet, new AsyncHttpResponseHandler() {
+
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                    Log.d("POST_TWEET", "Success");
+                    JSONObject response = null;
+                    try {
+                        response = new JSONObject(new String(responseBody, "UTF-8"));
+                        Tweet tweet1 = Tweet.fromJSON(response);
+                        tweets.add(0, tweet1);
+                        tweetAdapter.notifyItemInserted(0);
+                        rvTweets.smoothScrollToPosition(0);
+
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 @Override
