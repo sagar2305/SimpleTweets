@@ -15,12 +15,14 @@ import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.utils.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.restclienttemplate.utils.TwitterApp;
 import com.codepath.apps.restclienttemplate.utils.TwitterClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
@@ -104,6 +106,25 @@ public class TimelineActivity extends AppCompatActivity {
         }, page );
     }
 
+    private void postTweet(String tweet) {
+        try {
+            client.postTweet(tweet, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    Log.d("POST_TWEET", "Success");
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    Log.d("POST_TWEET", "Failure");
+                    error.printStackTrace();
+                }
+            });
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void onComposeTweet(MenuItem item) {
         Intent intent = new Intent(this, ComposeTweetActivity.class);
         startActivityForResult(intent, TWEET_REQUEST);
@@ -115,6 +136,7 @@ public class TimelineActivity extends AppCompatActivity {
             //insert the tweet
             String tweet = data.getStringExtra("tweet");
             Log.d("RESULTTWEET", tweet);
+            postTweet(tweet);
         }
     }
 }
