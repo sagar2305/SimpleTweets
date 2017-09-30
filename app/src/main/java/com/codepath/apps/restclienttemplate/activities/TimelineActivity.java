@@ -70,10 +70,9 @@ public class TimelineActivity extends AppCompatActivity {
         return true;
     }
 
-    private void populateTimeline(long page) {
+    private void populateTimeline(long uid) {
 
-        client.getHomeTimeline(new JsonHttpResponseHandler() {
-
+        client.getHomeTimeline(uid, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
 
@@ -103,7 +102,7 @@ public class TimelineActivity extends AppCompatActivity {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.d("TwitterClient", errorResponse.toString());
                 throwable.printStackTrace();            }
-        }, page );
+        });
     }
 
     private void postTweet(String tweet) {
