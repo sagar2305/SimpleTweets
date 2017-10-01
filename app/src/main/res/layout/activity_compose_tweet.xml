@@ -37,6 +37,7 @@
         android:layout_marginRight="20dp"
         android:background="@null"
         android:gravity="top|left"
+        android:hint="@string/whats_happening"
         tools:text="TextView" />
 
     <View
