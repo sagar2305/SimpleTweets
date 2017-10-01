@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/miCompose"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/compose_tweet"
         android:onClick="onComposeTweet"
         app:showAsAction="always"
         android:title="Tweet">
