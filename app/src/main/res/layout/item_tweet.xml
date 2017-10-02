@@ -29,6 +29,18 @@
         tools:text="TextView" />
 
     <TextView
+        android:id="@+id/tvHandle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ivProfileImage"
+        android:layout_marginLeft="5dp"
+        android:textColor="@android:color/black"
+        android:textSize="14dp"
+        android:layout_toRightOf="@+id/tvUserName"
+        android:layout_toEndOf="@+id/ivProfileImage"
+        tools:text="TextView" />
+
+    <TextView
         android:id="@+id/tvTimestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

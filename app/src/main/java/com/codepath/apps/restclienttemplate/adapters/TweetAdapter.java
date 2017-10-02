@@ -48,6 +48,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         // populate views
         holder.tvUsername.setText(tweet.getUser().name);
         holder.tvBody.setText(tweet.getBody());
+        holder.tvHandle.setText(tweet.getUser().screenName);
         try {
             holder.tvRelativeTimestamp.setText(tweet.getRelativeTimestamp());
         } catch (ParseException e) {
@@ -66,6 +67,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         public TextView tvUsername;
         public TextView tvBody;
         public TextView tvRelativeTimestamp;
+        public TextView tvHandle;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -75,6 +77,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             tvUsername = (TextView) itemView.findViewById(R.id.tvUserName);
             tvBody = (TextView) itemView.findViewById(R.id.tvBody);
             tvRelativeTimestamp = (TextView) itemView.findViewById(R.id.tvTimestamp);
+            tvHandle = (TextView) itemView.findViewById(R.id.tvHandle);
         }
     }
 }
