@@ -23,6 +23,8 @@
         android:layout_alignTop="@+id/ivProfileImage"
         android:layout_marginLeft="5dp"
         android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:textSize="16dp"
         android:layout_toEndOf="@+id/ivProfileImage"
         tools:text="TextView" />
 
@@ -43,6 +45,8 @@
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
         android:layout_marginRight="10dp"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="14dp"
         android:layout_toEndOf="@+id/ivProfileImage"
         android:layout_below="@+id/tvUserName"
         tools:text="" />
