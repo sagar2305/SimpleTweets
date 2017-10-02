@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.adapters.TweetAdapter;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.apps.restclienttemplate.utils.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.restclienttemplate.utils.TwitterApp;
 import com.codepath.apps.restclienttemplate.utils.TwitterClient;
@@ -21,6 +22,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -35,6 +37,7 @@ public class TimelineActivity extends AppCompatActivity {
     TweetAdapter tweetAdapter;
     ArrayList<Tweet> tweets;
     RecyclerView rvTweets;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +65,42 @@ public class TimelineActivity extends AppCompatActivity {
         });
 
         populateTimeline(-1);
+
+        getUserProfile();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.login, menu);
         return true;
+    }
+
+    private void getUserProfile() {
+        client.getUserProfile(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    user = User.fromJSON(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("TwitterClient", errorResponse.toString());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                Log.d("TwitterClient", errorResponse.toString());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.d("TwitterClient", responseString);
+            }
+        });
     }
 
     private void populateTimeline(long uid) {
@@ -139,6 +172,7 @@ public class TimelineActivity extends AppCompatActivity {
 
     public void onComposeTweet(MenuItem item) {
         Intent intent = new Intent(this, ComposeTweetActivity.class);
+        intent.putExtra("user", Parcels.wrap(user));
         startActivityForResult(intent, TWEET_REQUEST);
     }
 
