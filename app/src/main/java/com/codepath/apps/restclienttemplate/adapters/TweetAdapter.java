@@ -48,7 +48,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         // populate views
         holder.tvUsername.setText(tweet.getUser().name);
         holder.tvBody.setText(tweet.getBody());
-        holder.tvHandle.setText(tweet.getUser().screenName);
+        holder.tvHandle.setText("@" + tweet.getUser().screenName);
         try {
             holder.tvRelativeTimestamp.setText(tweet.getRelativeTimestamp());
         } catch (ParseException e) {
