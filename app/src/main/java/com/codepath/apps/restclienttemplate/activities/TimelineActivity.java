@@ -2,12 +2,15 @@ package com.codepath.apps.restclienttemplate.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.fragments.TweetsPagerAdapter;
 import com.codepath.apps.restclienttemplate.models.User;
 
 import org.parceler.Parcels;
@@ -18,15 +21,22 @@ public class TimelineActivity extends AppCompatActivity {
 
     User user;
 
-//    TweetsListFragment framgmentTweetsList;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
 
-//        framgmentTweetsList = (TweetsListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_timeline);
 //        getUserProfile();
+
+        //get the view pager
+        ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
+
+        //set the adapter
+        vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager(), this));
+
+        //setup tab layou
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(vpPager);
     }
 
     @Override
