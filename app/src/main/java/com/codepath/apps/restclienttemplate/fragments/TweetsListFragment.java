@@ -58,6 +58,9 @@ public class TweetsListFragment extends Fragment {
         return v;
     }
 
+    // this will be overridden
+    void populateTimeline(long uid) {}
+
     public void addItems(JSONArray response) {
         for (int i = 0; i < response.length(); i++) {
             try {
