@@ -41,6 +41,7 @@ public class TimelineActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_timeline, menu);
         getMenuInflater().inflate(R.menu.login, menu);
         return true;
     }
@@ -120,5 +121,10 @@ public class TimelineActivity extends AppCompatActivity {
             Log.d("RESULTTWEET", tweet);
 //            postTweet(tweet);
         }
+    }
+
+    public void onProfileView(MenuItem item) {
+        Intent i = new Intent(this, ProfileActivity.class);
+        startActivity(i);
     }
 }

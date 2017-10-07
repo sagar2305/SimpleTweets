@@ -1,11 +1,11 @@
 package com.codepath.apps.restclienttemplate.utils;
 
+import android.app.Application;
+import android.content.Context;
+
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowLog;
 import com.raizlabs.android.dbflow.config.FlowManager;
-
-import android.app.Application;
-import android.content.Context;
 
 /*
  * This is the Android application itself and is used to configure various settings
@@ -32,4 +32,6 @@ public class TwitterApp extends Application {
 	public static TwitterClient getRestClient() {
 		return (TwitterClient) TwitterClient.getInstance(TwitterClient.class, TwitterApp.context);
 	}
+
+
 }
