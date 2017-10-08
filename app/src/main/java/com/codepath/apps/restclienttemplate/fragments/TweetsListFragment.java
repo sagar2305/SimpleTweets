@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.adapters.TweetAdapter;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
  * Created by SagarMutha on 10/7/17.
  */
 
-public class TweetsListFragment extends Fragment {
+public class TweetsListFragment extends Fragment implements TweetAdapter.TweetAdapterListener {
 
     // inflation happens inside onCreateview
     TweetAdapter tweetAdapter;
@@ -42,7 +43,7 @@ public class TweetsListFragment extends Fragment {
         // construct adapter
         rvTweets = (RecyclerView) v.findViewById(R.id.rvTweet);
         tweets = new ArrayList<>();
-        tweetAdapter = new TweetAdapter(tweets);
+        tweetAdapter = new TweetAdapter(tweets, this);
 
         rvTweets.setLayoutManager(new LinearLayoutManager(getContext()));
         rvTweets.setAdapter(tweetAdapter);
@@ -71,5 +72,11 @@ public class TweetsListFragment extends Fragment {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void onItemSelected(View view, int position) {
+        Tweet tweet = tweets.get(position);
+        Toast.makeText(getContext(), tweet.getBody(), Toast.LENGTH_SHORT).show();
     }
 }
