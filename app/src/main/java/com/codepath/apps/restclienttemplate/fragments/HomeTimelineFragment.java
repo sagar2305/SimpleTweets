@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.apps.restclienttemplate.utils.TwitterApp;
 import com.codepath.apps.restclienttemplate.utils.TwitterClient;
@@ -35,6 +36,12 @@ public class HomeTimelineFragment extends TweetsListFragment {
         client = TwitterApp.getRestClient();
         populateTimeline(-1);
         getUserProfile();
+    }
+
+    public void  addTweetToTimeline(Tweet tweet) {
+        tweets.add(0, tweet);
+        tweetAdapter.notifyItemInserted(0);
+        rvTweets.smoothScrollToPosition(0);
     }
 
     private void getUserProfile() {

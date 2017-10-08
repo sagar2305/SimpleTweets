@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -23,6 +22,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetsListFra
 
     static final int TWEET_REQUEST = 1;  // The request code
     User user;
+    TweetsPagerAdapter tweetsPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,8 @@ public class TimelineActivity extends AppCompatActivity implements TweetsListFra
         ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
 
         //set the adapter
-        vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager(), this));
+        tweetsPagerAdapter = new TweetsPagerAdapter(getSupportFragmentManager(), this);
+        vpPager.setAdapter(tweetsPagerAdapter);
 
         //setup tab layou
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
@@ -47,38 +48,6 @@ public class TimelineActivity extends AppCompatActivity implements TweetsListFra
         return true;
     }
 
-//    private void postTweet(String tweet) {
-//        try {
-//            client.postTweet(tweet, new AsyncHttpResponseHandler() {
-//
-//                @Override
-//                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-//                    JSONObject response = null;
-//                    try {
-//                        response = new JSONObject(new String(responseBody, "UTF-8"));
-//                        Tweet tweet1 = Tweet.fromJSON(response);
-//                        tweets.add(0, tweet1);
-//                        tweetAdapter.notifyItemInserted(0);
-//                        rvTweets.smoothScrollToPosition(0);
-//
-//                    } catch (UnsupportedEncodingException e) {
-//                        e.printStackTrace();
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-//                    Log.d("POST_TWEET", "Failure");
-//                    error.printStackTrace();
-//                }
-//            });
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     public void onComposeTweet(MenuItem item) {
         Intent intent = new Intent(this, ComposeTweetActivity.class);
         if (user != null) {
@@ -87,26 +56,29 @@ public class TimelineActivity extends AppCompatActivity implements TweetsListFra
         startActivityForResult(intent, TWEET_REQUEST);
     }
 
+    public void onProfileView(MenuItem item) {
+        Intent i = new Intent(this, ProfileActivity.class);
+        startActivity(i);
+    }
+
+    private void addTweetToTimeline(Tweet tweet) {
+        tweetsPagerAdapter.getHomeTimeLineFragment().addTweetToTimeline(tweet);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == TWEET_REQUEST && resultCode == RESULT_OK) {
             //insert the tweet
-            String tweet = data.getStringExtra("tweet");
-            Log.d("RESULTTWEET", tweet);
-//            postTweet(tweet);
+            Tweet tweet = Parcels.unwrap(data.getParcelableExtra("tweet"));
+//            Log.d("RESULTTWEET", tweet);
+            addTweetToTimeline(tweet);
         }
-    }
-
-    public void onProfileView(MenuItem item) {
-        Intent i = new Intent(this, ProfileActivity.class);
-        startActivity(i);
     }
 
     @Override
     public void onTweetSelected(Tweet tweet) {
         Toast.makeText(this, tweet.getBody(), Toast.LENGTH_SHORT).show();
     }
-
 
     @Override
     public void onUserFetched(User user) {
