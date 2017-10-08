@@ -16,6 +16,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -28,9 +29,9 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        String screenName = getIntent().getStringExtra("screen_name");
+        User user = Parcels.unwrap(getIntent().getParcelableExtra("user"));
         //create user fragment
-        UserTimelineFragment userTimelineFragment = UserTimelineFragment.newInstance(screenName);
+        UserTimelineFragment userTimelineFragment = UserTimelineFragment.newInstance(user.screenName);
 
         //display user timeline fragment
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -41,20 +42,28 @@ public class ProfileActivity extends AppCompatActivity {
         // commit transaction
         ft.commit();
 
-        client = TwitterApp.getRestClient();
-        client.getUserProfile(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                User user = null;
-                try {
-                    user = User.fromJSON(response);
-                    getSupportActionBar().setTitle(user.screenName);
-                    populateUserHeadline(user);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+        if (user == null) {
+            client = TwitterApp.getRestClient();
+            client.getUserProfile(new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    User user = null;
+                    try {
+                        user = User.fromJSON(response);
+                        setupActionBar(user);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            setupActionBar(user);
+        }
+    }
+
+    private void setupActionBar(User user) {
+        getSupportActionBar().setTitle(user.screenName);
+        populateUserHeadline(user);
     }
 
     public void populateUserHeadline(User user) {

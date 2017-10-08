@@ -35,6 +35,9 @@ public class User implements Parcelable {
         return user;
     }
 
+    public User() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -46,9 +49,9 @@ public class User implements Parcelable {
         dest.writeLong(this.uid);
         dest.writeString(this.screenName);
         dest.writeString(this.profileImageUrl);
-    }
-
-    public User() {
+        dest.writeString(this.tagLine);
+        dest.writeInt(this.followersCount);
+        dest.writeInt(this.followingCount);
     }
 
     protected User(Parcel in) {
@@ -56,9 +59,12 @@ public class User implements Parcelable {
         this.uid = in.readLong();
         this.screenName = in.readString();
         this.profileImageUrl = in.readString();
+        this.tagLine = in.readString();
+        this.followersCount = in.readInt();
+        this.followingCount = in.readInt();
     }
 
-    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+    public static final Creator<User> CREATOR = new Creator<User>() {
         @Override
         public User createFromParcel(Parcel source) {
             return new User(source);
