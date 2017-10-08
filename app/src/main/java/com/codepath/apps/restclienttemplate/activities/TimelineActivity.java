@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.fragments.HomeTimelineFragment;
 import com.codepath.apps.restclienttemplate.fragments.TweetsListFragment;
 import com.codepath.apps.restclienttemplate.fragments.TweetsPagerAdapter;
 import com.codepath.apps.restclienttemplate.models.Tweet;
@@ -18,18 +19,15 @@ import com.codepath.apps.restclienttemplate.models.User;
 
 import org.parceler.Parcels;
 
-public class TimelineActivity extends AppCompatActivity implements TweetsListFragment.TweetSelectedListener {
+public class TimelineActivity extends AppCompatActivity implements TweetsListFragment.TweetSelectedListener, HomeTimelineFragment.OnUserFetchedListener {
 
     static final int TWEET_REQUEST = 1;  // The request code
-
     User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
-
-//        getUserProfile();
 
         //get the view pager
         ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
@@ -48,35 +46,6 @@ public class TimelineActivity extends AppCompatActivity implements TweetsListFra
         getMenuInflater().inflate(R.menu.login, menu);
         return true;
     }
-
-//    private void getUserProfile() {
-//        client.getUserProfile(new JsonHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                try {
-//                    user = User.fromJSON(response);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                Log.d("TwitterClient", errorResponse.toString());
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-//                Log.d("TwitterClient", errorResponse.toString());
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-//                Log.d("TwitterClient", responseString);
-//            }
-//        });
-//    }
-
 
 //    private void postTweet(String tweet) {
 //        try {
@@ -112,7 +81,9 @@ public class TimelineActivity extends AppCompatActivity implements TweetsListFra
 
     public void onComposeTweet(MenuItem item) {
         Intent intent = new Intent(this, ComposeTweetActivity.class);
-        intent.putExtra("user", Parcels.wrap(user));
+        if (user != null) {
+            intent.putExtra("user", Parcels.wrap(user));
+        }
         startActivityForResult(intent, TWEET_REQUEST);
     }
 
@@ -134,5 +105,11 @@ public class TimelineActivity extends AppCompatActivity implements TweetsListFra
     @Override
     public void onTweetSelected(Tweet tweet) {
         Toast.makeText(this, tweet.getBody(), Toast.LENGTH_SHORT).show();
+    }
+
+
+    @Override
+    public void onUserFetched(User user) {
+        this.user = user;
     }
 }
